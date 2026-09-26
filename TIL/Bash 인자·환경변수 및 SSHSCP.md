@@ -99,7 +99,7 @@ echo $?
 
 ### 2.4 환경 변수와 `export`
 
-환경 변수를 Script에서 사용할 수 있는 방법을 확인함.
+일반 변수로 선언한 값은 현재 Shell에서는 사용할 수 있지만, 실행한 Script와 같은 자식 프로세스에는 환경변수로 전달되지 않는 것을 확인.
 
 ```bash
 MY_PW="1234"
@@ -184,17 +184,18 @@ SSH Key 기반 인증의 기본 흐름은 다음과 같이 이해함.
 
 ```text
 [클라이언트]
-개인키(private key)
+개인키(private key) 보유
         │
         │ SSH 접속 요청
         ▼
 [SSH 서버]
-authorized_keys
+사용자 계정의 authorized_keys에
 공개키(public key) 등록
         │
-        │ 공개키 기반 인증
+        │ 클라이언트가 개인키를 보유하고 있음을 증명
+        │ 서버는 등록된 공개키로 검증
         ▼
-사용자 인증
+공개키 기반 사용자 인증 성공
         │
         ▼
 원격 SSH 세션 생성
@@ -216,7 +217,7 @@ authorized_keys
 sudo service ssh start
 ```
 
-이후 `openssh-server`를 설치했다.
+이후 `openssh-server` 설치.
 
 ```bash
 sudo apt update && sudo apt install openssh-server -y
