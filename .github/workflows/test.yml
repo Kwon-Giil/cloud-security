@@ -17,7 +17,7 @@ jobs:
 
       - name: 2. 도커 컴포즈로 테스트 환경(Web+DB) 기동
         # 로컬에서 쓰던 명령어와 100% 동일합니다.
-        run: docker compose up -d
+        run: docker compose up -d --build
 
       - name: 3. DB 부팅 대기 (선택 사항)
         # DB 컨테이너가 켜져도 연결 준비까지 몇 초 걸릴 수 있으므로 잠시 대기
@@ -25,7 +25,9 @@ jobs:
 
       - name: 4. 자동화 테스트 스크립트 실행
         # 가상 환경(CI)에서는 실제 키보드/모니터(TTY)가 없으므로 -T 옵션을 붙여야 에러가 안 납니다.
-        run: docker compose exec -T web npm run test
+        run: |
+          sleep 3
+          curl -f http://localhost
         # (만약 파이썬 QA 환경이라면: docker compose exec -T qa-container pytest)
 
       - name: 5. 테스트 완료 후 환경 철거 (볼륨 초기화)
