@@ -1,17 +1,17 @@
 name: Automated Integration Test
 
-on:
+on: # 이벤트 트리거 (언제 할 것인가?)
   push:
     branches: [ "main", "master" ] # main, master 브랜치 둘 다 감지
   pull_request:
     branches: [ "main", "master" ]
   workflow_dispatch:               # 수동 실행 버튼을 띄워주는 스위치
 
-jobs:
+jobs: # 독립된 가상 서버 환경 (어디서 할 것인가?)
   test-environment:
     runs-on: ubuntu-latest # 도커가 깔려있는 리눅스 가상 컴퓨터 할당
 
-    steps:
+    steps: # 순차적 실행 명령어 목록 (무엇을 할 것인가?)
       - name: 1. 최신 코드 불러오기 (Checkout)
         uses: actions/checkout@v5
 
