@@ -13,7 +13,7 @@ jobs:
 
     steps:
       - name: 1. 최신 코드 불러오기 (Checkout)
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: 2. 도커 컴포즈로 테스트 환경(Web+DB) 기동
         # 로컬에서 쓰던 명령어와 100% 동일합니다.
