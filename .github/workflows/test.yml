@@ -2,7 +2,10 @@ name: Automated Integration Test
 
 on:
   push:
-    branches: [ "main" ] # main 브랜치에 코드가 push될 때 작동
+    branches: [ "main", "master" ] # main, master 브랜치 둘 다 감지
+  pull_request:
+    branches: [ "main", "master" ]
+  workflow_dispatch:               # 수동 실행 버튼을 띄워주는 스위치
 
 jobs:
   test-environment:
@@ -17,7 +20,7 @@ jobs:
         run: docker compose up -d
 
       - name: 3. DB 부팅 대기 (선택 사항)
-        # DB 컨테이너가 켜져도 연결 준비까지 몇 초 걸릴 수 있으므로 잠시 대기합니다.
+        # DB 컨테이너가 켜져도 연결 준비까지 몇 초 걸릴 수 있으므로 잠시 대기
         run: sleep 5
 
       - name: 4. 자동화 테스트 스크립트 실행
@@ -26,6 +29,6 @@ jobs:
         # (만약 파이썬 QA 환경이라면: docker compose exec -T qa-container pytest)
 
       - name: 5. 테스트 완료 후 환경 철거 (볼륨 초기화)
-        # 4번 단계의 테스트가 실패(에러)하더라도 철거 작업은 무조건 실행되도록 강제합니다.
+        # 4번 단계의 테스트가 실패(에러)하더라도 철거 작업은 무조건 실행되도록 강제
         if: always() 
         run: docker compose down -v
