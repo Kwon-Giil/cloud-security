@@ -29,17 +29,16 @@ jobs:
       # 📦 3. 이미지 빌드 및 GHCR 푸시
       - name: 3. 도커 이미지 빌드 및 GHCR 업로드
         run: |
-          # 깃허브 아이디/레포지토리명을 소문자로 변환 (GHCR 규칙)
-          REPO_NAME=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
-          IMAGE_TAG="ghcr.io/${REPO_NAME}:latest"
+           REPO_NAME=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
+           IMAGE_TAG="ghcr.io/${REPO_NAME}:latest"
 
-          echo "빌드 대상 이미지: ${IMAGE_TAG}"
+           # 1) Compose로 빌드
+           docker compose build
 
-          # 도커 이미지 빌드 (태그 지정)
-          docker build -t ${IMAGE_TAG} .
-
-          # GHCR로 도커 이미지 푸시(업로드)
-          docker push ${IMAGE_TAG}
+           # 2) 생성된 이미지에 GHCR 태그 부여 후 push
+           # (docker-compose.yml의 service 이름이 web인 경우)
+           docker tag $(docker compose config --images | head -n 1) ${IMAGE_TAG}
+           docker push ${IMAGE_TAG}
 
       # 🧪 4. 푸시한 이미지를 가져와서 컨테이너 헬스 체크
       - name: 4. 업로드된 이미지로 컨테이너 실행 및 테스트
@@ -47,6 +46,6 @@ jobs:
           REPO_NAME=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
           IMAGE_TAG="ghcr.io/${REPO_NAME}:latest"
 
-          docker run -d -p 8080:8080 --name test-app ${IMAGE_TAG}
+          docker run -d -p 8080:80 --name test-app ${IMAGE_TAG}
           sleep 3
           curl -f http://localhost:8080
