@@ -5,7 +5,6 @@ on:
     branches: [ master ]
   workflow_dispatch:
 
-# 🔑 GHCR(패키지 저장소)에 이미지를 올릴 수 있는 권한 부여
 permissions:
   contents: read
   packages: write
@@ -18,7 +17,6 @@ jobs:
       - name: 1. 소스코드 내려받기
         uses: actions/checkout@v7
 
-      # 🔑 2. GHCR에 로그인 (github.actor: 내 깃허브 아이디 / GITHUB_TOKEN: 자동 제공 토큰)
       - name: 2. GitHub Container Registry 로그인
         uses: docker/login-action@v3
         with:
@@ -26,21 +24,21 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      # 📦 3. 이미지 빌드 및 GHCR 푸시
-      - name: 3. 도커 이미지 빌드 및 GHCR 업로드
+      - name: 3. 도커 이미지 다운로드 및 GHCR 업로드
         run: |
-           REPO_NAME=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
-           IMAGE_TAG="ghcr.io/${REPO_NAME}:latest"
+          REPO_NAME=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
+          IMAGE_TAG="ghcr.io/${REPO_NAME}:latest"
 
-           # 1) Compose로 빌드
-           docker compose build
+          # 1) docker-compose.yml에 적힌 이미지 미리 다운로드
+          docker compose pull
 
-           # 2) 생성된 이미지에 GHCR 태그 부여 후 push
-           # (docker-compose.yml의 service 이름이 web인 경우)
-           docker tag $(docker compose config --images | head -n 1) ${IMAGE_TAG}
-           docker push ${IMAGE_TAG}
+          # 2) 다운로드된 이미지 이름 가져와서 GHCR 태그 붙이기
+          LOCAL_IMAGE=$(docker compose config --images | head -n 1)
+          docker tag ${LOCAL_IMAGE} ${IMAGE_TAG}
 
-      # 🧪 4. 푸시한 이미지를 가져와서 컨테이너 헬스 체크
+          # 3) GHCR에 업로드(Push)
+          docker push ${IMAGE_TAG}
+
       - name: 4. 업로드된 이미지로 컨테이너 실행 및 테스트
         run: |
           REPO_NAME=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
