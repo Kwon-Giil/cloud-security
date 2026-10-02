@@ -1,0 +1,14 @@
+version: '3.8'
+services:
+  jenkins:
+    image: jenkins/jenkins:lts
+    container_name: my-jenkins
+    ports:
+      - "9090:8080"
+      - "50000:50000"
+    volumes:
+      - jenkins_data:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock  # <--- 이 줄을 추가해주세요!
+
+volumes:
+  jenkins_data:
