@@ -1,0 +1,11 @@
+# 1. 공식 젠킨스 이미지를 베이스로 가져옵니다.
+FROM jenkins/jenkins:lts
+
+# 2. 설치를 위해 임시로 최고 관리자(root) 권한을 빌립니다.
+USER root
+
+# 3. 도커 클라이언트를 설치합니다. (어제 손으로 치던 그 명령어입니다!)
+RUN apt-get update && apt-get install -y docker.io
+
+# 4. 실무 정석: 보안을 위해 설치가 끝나면 다시 젠킨스 계정으로 내려옵니다.
+USER jenkins

@@ -1,14 +1,11 @@
 version: '3.8'
 services:
   jenkins:
-    image: jenkins/jenkins:lts
-    container_name: my-jenkins
+    build: .                 # 변경 1: image 대신 현재 폴더(.)의 Dockerfile을 빌드하라고 지시
+    user: root               # 변경 2: 도커 소켓 접근 권한(Permission denied) 영구 해결!
+    container_name: jenkins
     ports:
       - "9090:8080"
-      - "50000:50000"
     volumes:
-      - jenkins_data:/var/jenkins_home
-      - /var/run/docker.sock:/var/run/docker.sock  # <--- 이 줄을 추가해주세요!
-
-volumes:
-  jenkins_data:
+      - ./jenkins_data:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock

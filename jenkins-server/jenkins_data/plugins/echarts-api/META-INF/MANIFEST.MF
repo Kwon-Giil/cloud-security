@@ -1,0 +1,30 @@
+Manifest-Version: 1.0
+Created-By: Maven Archiver 3.6.6
+Java-Version: 21
+Build-Jdk-Spec: 21
+Specification-Title: ECharts API Plugin
+Specification-Version: 6.1
+Implementation-Title: ECharts API Plugin
+Implementation-Version: 6.1.0-1321.v86c4c5114494
+Group-Id: io.jenkins.plugins
+Artifact-Id: echarts-api
+Short-Name: echarts-api
+Long-Name: ECharts API Plugin
+Url: https://github.com/jenkinsci/echarts-api-plugin
+Plugin-Version: 6.1.0-1321.v86c4c5114494
+Hudson-Version: 2.555.3
+Jenkins-Version: 2.555.3
+Plugin-Dependencies: bootstrap5-api:5.3.8-1048.va_c299057e35c,commons-la
+ ng3-api:3.20.0-109.ve43756e2d2b_4,commons-text-api:1.15.0-218.va_615734
+ 70393,font-awesome-api:7.3.1-1013.v0835a_879ec6d,jackson3-api:3.2.2-96.
+ v599957900a_1a_,jquery3-api:3.7.1-687.v68d468e40b_30,plugin-util-api:7.
+ 1341.v039f146993d9
+Plugin-Developers: Ullrich Hafner:uhafner:ullrich.hafner@gmail.com
+Support-Dynamic-Loading: true
+Plugin-License-Name: MIT license
+Plugin-ScmConnection: scm:git:https://github.com/jenkinsci/echarts-api-p
+ lugin.git
+Plugin-ScmTag: 86c4c5114494ddebf2a9f764836c353b68139815
+Plugin-ScmUrl: https://github.com/jenkinsci/echarts-api-plugin
+Implementation-Build: 86c4c5114494ddebf2a9f764836c353b68139815
+

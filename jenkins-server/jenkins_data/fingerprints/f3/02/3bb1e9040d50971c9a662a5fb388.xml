@@ -1,0 +1,13 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<fingerprint>
+  <timestamp>2026-10-03 04:32:31.275 UTC</timestamp>
+  <md5sum>f3023bb1e9040d50971c9a662a5fb388</md5sum>
+  <fileName>Credential id=ghcr-credentials name=kwon-giil/****** (GitHub Container Registry Access Token)</fileName>
+  <usages>
+    <entry>
+      <string>my-first-pipeline</string>
+      <ranges>5</ranges>
+    </entry>
+  </usages>
+  <facets/>
+</fingerprint>

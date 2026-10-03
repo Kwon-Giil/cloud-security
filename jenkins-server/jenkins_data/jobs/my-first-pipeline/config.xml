@@ -1,0 +1,70 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<flow-definition plugin="workflow-job@1602.v2a_70b_80a_2396">
+  <actions>
+    <org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobAction plugin="pipeline-model-definition@2.2293.v6e7193cec599"/>
+    <org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction plugin="pipeline-model-definition@2.2293.v6e7193cec599">
+      <jobProperties/>
+      <triggers/>
+      <parameters/>
+      <options/>
+    </org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction>
+  </actions>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties/>
+  <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@4383.v04fa_a_3d67b_d9">
+    <script>pipeline {
+    agent any
+    
+    // 💡 1. 젠킨스 금고에 등록한 ID를 여기서 안전하게 변수로 등록합니다.
+    environment {
+        GHCR_CREDENTIALS = credentials(&apos;ghcr-credentials&apos;)
+    }
+    
+    stages {
+        stage(&apos;1단계: GHCR 로그인&apos;) {
+            steps {
+                echo &apos;GitHub Container Registry에 로그인합니다...&apos;
+                // 💡 2. 젠킨스가 제공하는 안전한 withCredentials 블록을 사용해 비밀번호가 로그에 노출되지 않게 로그인합니다.
+                sh &apos;&apos;&apos;
+                    echo $GHCR_CREDENTIALS_PSW | docker login ghcr.io -u $GHCR_CREDENTIALS_USR --password-stdin
+                &apos;&apos;&apos;
+            }
+        }
+        
+        stage(&apos;2단계: 최신 이미지 Pull&apos;) {
+            steps {
+                echo &apos;깃허브에 올려둔 개인 이미지를 다운로드합니다...&apos;
+                // 본인의 GHCR 이미지 주소 (대소문자 및 경로 확인!)
+                sh &apos;docker pull ghcr.io/kwon-giil/qa:latest&apos; 
+            }
+        }
+        
+        stage(&apos;3단계: 기존 컨테이너 정리&apos;) {
+            steps {
+                echo &apos;이전에 실행 중이던 컨테이너가 있다면 삭제합니다.&apos;
+                sh &apos;docker rm -f my-qa-app || true&apos;
+            }
+        }
+        
+        stage(&apos;4단계: 새 컨테이너 실행 (Run)&apos;) {
+            steps {
+                echo &apos;새로운 이미지로 컨테이너를 구동합니다!&apos;
+                // 포트는 필요에 맞게 수정하세요 (예: 8080:80 또는 앱이 쓰는 포트)
+                sh &apos;docker run -d --name my-qa-app -p 8080:80 ghcr.io/kwon-giil/qa:latest&apos;
+            }
+        }
+
+        stage(&apos;5단계: 찌꺼기 이미지 정리 (Prune)&apos;) {
+            steps {
+                echo &apos;태그가 없는 찌꺼기 이미지를 청소합니다.&apos;
+                sh &apos;docker image prune -f&apos;
+            }
+        }
+    }
+}</script>
+    <sandbox>true</sandbox>
+  </definition>
+  <triggers/>
+  <disabled>false</disabled>
+</flow-definition>

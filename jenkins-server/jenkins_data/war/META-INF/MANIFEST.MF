@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Created-By: Maven WAR Plugin 3.5.1
+Java-Version: 11
+Build-Jdk-Spec: 21
+Implementation-Title: Jenkins war
+Main-Class: executable.Main
+Add-Opens: java.base/java.lang java.base/java.io java.base/java.util
+Hudson-Version: 1.395
+Implementation-Build: 500c80a425077d987b97f62be32887d4f32e9ffb
+Implementation-Version: 2.580.1
+Jenkins-Version: 2.580.1
+Remoting-Embedded-Version: 3386.v353e57a_1b_ea_0
+Remoting-Minimum-Supported-Version: 3176.v207ec082a_8c0
+
