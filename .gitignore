@@ -90,3 +90,6 @@ $RECYCLE.BIN/
 
 # Built Visual Studio Code Extensions
 *.vsix
+
+#csv files
+*.csv
