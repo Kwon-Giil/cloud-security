@@ -93,3 +93,10 @@ $RECYCLE.BIN/
 
 #csv files
 *.csv
+
+#terraformfiles
+*.tfstate
+*.tfstate.*
+*.tfvars
+.terraform/
+.terraform.lock.hcl
